@@ -20,6 +20,7 @@ RUN apt-get update \
         gcc \
         make \
         python3-pip \
+        zsh \
 		# Clean up
     && apt-get autoremove -y \
     && apt-get clean -y
