@@ -4,17 +4,20 @@ call plug#begin()
 
 Plug 'fatih/vim-go'
 
+Plug 'mfussenegger/nvim-dap'
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
-Plug 'kristijanhusak/completion-tags'
+"Plug 'nvim-lua/completion-nvim'
+Plug 'hrsh7th/nvim-compe'
+"Plug 'kristijanhusak/completion-tags'
 "Plug 'nvim-lua/diagnostic-nvim'
 Plug 'nvim-lua/lsp-status.nvim'
-Plug 'tjdevries/nlua.nvim'
-Plug 'tjdevries/lsp_extensions.nvim'
+"Plug 'tjdevries/nlua.nvim'
+"Plug 'tjdevries/lsp_extensions.nvim'
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Debuggers
 Plug 'puremourning/vimspector'
+Plug 'nvim-telescope/telescope-vimspector.nvim'
 Plug 'szw/vim-maximizer'
 
 " telescope requirements...
@@ -22,12 +25,18 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-lua/telescope.nvim'
 
-"Plug 'majutsushi/tagbar'
+" Snipets
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+
+" Neovim Tree shitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
+
+Plug 'majutsushi/tagbar'
 Plug 'liuchengxu/vista.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-"Plug 'shougo/neocomplete.vim'
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 "Plug 'kyazdani42/nvim-tree.lua'
@@ -38,13 +47,28 @@ Plug 'bling/vim-airline'
 Plug 'tpope/vim-fugitive'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'mbbill/undotree'
+Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
 Plug 'Lokaltog/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 Plug 'scrooloose/nerdcommenter'
+Plug 'szw/vim-maximizer'
+Plug 'junegunn/vim-peekaboo'
+Plug 'Yilin-Yang/vim-markbar'
 
+Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
+Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-git'
+Plug 'motemen/git-vim'
 Plug 'airblade/vim-gitgutter'
+
 Plug 'kdheepak/lazygit.nvim'
+
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'kristijanhusak/vim-dadbod-completion'
+
+Plug 'kosayoda/nvim-lightbulb'
 
 Plug 'ekalinin/Dockerfile.vim'
 "Plug 'plasticboy/vim-markdown'
@@ -59,7 +83,9 @@ Plug 'sheerun/vim-polyglot'
 
 "Plug 'morhetz/gruvbox'
 Plug 'gruvbox-community/gruvbox'
-
+Plug 'drewtempelmeyer/palenight.vim'
+Plug 'ayu-theme/ayu-vim'
+Plug 'kristijanhusak/vim-hybrid-material'
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-easymotion.vim'

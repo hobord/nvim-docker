@@ -11,7 +11,7 @@ set smartindent
 set hidden
 
 set number
-set relativenumber
+"set relativenumber
 set signcolumn=yes
 "set cuc
  
@@ -22,15 +22,19 @@ set encoding=utf-8
 set splitbelow
 set splitright
 set clipboard=unnamedplus
- 
+  
 set undodir=/tmp
 set backupdir=~/backup
- 
+
+" spell
+set spell spelllang=en_us
+set nospell
+
 colorscheme gruvbox
 set background=dark
 "let g:solarized_termcolors = 256  " New line!!
-set guifont=Fira\ Code
- 
+set guifont=FuraCode
+highlight Comment cterm=italic gui=italic 
  
 " fix scroll black background issue
 set t_ut=
@@ -45,16 +49,11 @@ set backspace=indent,eol,start
  
 " higlight search
 :noremap <F4> :set hlsearch! hlsearch?<CR>
-"lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
+lua require('telescope').setup({defaults = {file_sorter = require('telescope.sorters').get_fzy_sorter}})
  
 " find in subdirectories
 set path+=**
-" Display all found files in tabs
-"set wildmenu
-" 
  
-"map <M-Left> :bp<CR> 
-"map <M-Right> :bn<CR>
 map <C-PageUp> :bp<CR> 
 map <C-PageDown> :bn<CR>
 map <C-S-left> <C-w>h  
@@ -68,8 +67,14 @@ map <C-t><right> :tabn<cr>
 map <C-t>n :tabnew<cr>
 map <leader>tc :tabclose<cr>
 map <C-s> <esc>:w<cr>
-imap <C-s> <esc>:w<cr>
-
+inoremap <C-s> <esc>:w<cr>i
+inoremap II <Esc>I
+inoremap AA <Esc>A
+inoremap OO <Esc>O
+inoremap oo <Esc>o
+inoremap CC <Esc>C
+inoremap SS <Esc>S
+inoremap UU <Esc>ui
 "inoremap <C-l> <C-o>w
 "noremap <C-h> <C-o>b
 
@@ -77,76 +82,123 @@ imap <C-s> <esc>:w<cr>
 map <C-c> "cy
 nnoremap <C-v> "cP`]
 
+" Close Buffer + keep window 
+command! BW :bn|:bd#
+
+" Remove higlight after search
+nnoremap <leader>n :noh<cr>
+
+" EasyAlign
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
 "nnoremap <C-t> :FloatermToggle<CR>
 "let g:floaterm_autoinsert=0
 "nnoremap <M-b> :Vista finder<CR>
 "nnoremap <C-B> :Vista!!<CR>
 "nnoremap <C-f> :Files<CR>
 nnoremap <leader>r :Rg<CR>
-nnoremap <M-g> :LazyGit<CR>
+"nnoremap <M-g> :LazyGit<CR>
 "nnoremap <C-b> :TagbarToggle<CR>
 nnoremap <C-h> :UndotreeToggle<CR>
-
-"command! LF FloatermNew lf
-command! Vifm FloatermNew vifm
-"command! Lgit FloatermNew lazygit
+nnoremap <leader>t :TagbarToggle<CR>
+command! LF FloatermNew lf
+command! Vifm FloatermNew --name=vifm --title=vifm --height=0.8 --width=0.9 --autoclose=2 vifm
+command! Lgit FloatermNew lazygit
+command! Gitui FloatermNew --name=gitui --title=gitui --height=0.8 --width=0.9 --autoclose=2 gitui
+command! Reload :source ~/.config/nvim/init.vim 
 " Find files using Telescope command-line sugar.
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
+noremap <leader>gis :lua require'telescope.builtin'.git_status{}<cr>
+noremap <leader>gic :lua require'telescope.builtin'.git_commits{}<cr>
+noremap <leader>gicb :lua require'telescope.builtin'.git_bcommits{}<cr>
+noremap <leader>gib :lua require'telescope.builtin'.git_branches{}<cr>
+nnoremap <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({ color_devicons = true }))<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fr <cmd>lua require'telescope.builtin'.lsp_references{}<cr>
 nnoremap <leader>fs <cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>
+nnoremap <leader>fws <cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<cr>
+nnoremap <leader>fm <cmd>lua require'telescope.builtin'.marks{}<cr>
+nnoremap <leader>f <cmd>lua require'telescope.builtin'.current_buffer_fuzzy_find{}<cr>
+nnoremap <Leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ color_devicons = true }))<cr>
+"lua require('telescope').extensions.vimspector.configurations()
 
+nmap <Leader>m  :MinimapToggle<cr>
+nmap <leader>gd :Gdiff<cr>
+
+
+" Markbar
+" only display alphabetic marks a-i and A-I
+let g:markbar_marks_to_display = 'abcdefghiABCDEFGHI'
+" width of a vertical split markbar
+let g:markbar_width = 80
+let g:markbar_peekaboo_width = 80
+" indentation for lines of context
+let g:markbar_context_indent_block = '  '
+" number of lines of context to retrieve per mark
+let g:markbar_num_lines_context = 3
+" markbar-local mappings
+let g:markbar_jump_to_mark_mapping  = '<CR>'
+let g:markbar_next_mark_mapping     = 'n'
+let g:markbar_previous_mark_mapping = 'N'
+let g:markbar_rename_mark_mapping   = '<F2>'
+let g:markbar_reset_mark_mapping    = 'r'
+let g:markbar_delete_mark_mapping   = '<Del>'
+" open/close markbar mappings
+"nmap <Leader>m  <Plug>ToggleMarkbar
+"nmap <Leader>mo <Plug>OpenMarkbar
+"nmap <Leader>mc <Plug>CloseMarkbar
+
+source $HOME/.config/nvim/golang.vim
+source $HOME/.config/nvim/python.vim
+source $HOME/.config/nvim/php.vim
 
 " autocompletion
-"let g:deoplete#enable_at_startup = 1
+set completeopt=menu,menuone,noselect
+set shortmess+=c
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-lua require'lspconfig'.gopls.setup{on_attach=require'completion'.on_attach}
-autocmd BufEnter * lua require'completion'.on_attach()
-set completeopt=menuone,noinsert,noselect
-set shortmess+=c
-" Or combine with lsp
-let g:completion_chain_complete_list = {
-      \ 'default': [
-      \    {'complete_items': ['lsp', 'tags']},
-      \  ]}
 
+lua << EOF
+  require'compe'.setup {
+    enabled = true;
+    autocomplete = true;
+    debug = false;
+    min_length = 1;
+    preselect = 'enable';
+    throttle_time = 80;
+    source_timeout = 200;
+    incomplete_delay = 400;
+    max_abbr_width = 100;
+    max_kind_width = 100;
+    max_menu_width = 100;
+    documentation = true;
+    source = {
+      path = true;
+      buffer = true;
+      calc = true;
+      vsnip = true;
+      nvim_lsp = true;
+      nvim_lua = true;
+      spell = true;
+      tags = true;
+      snippets_nvim = true;
+      vim_dadbod_completion = true
+    };
+  }
+EOF
+" Sql Compe
+autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
+autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 
-" vim go
-" disable open browser after posting snippet
-let g:go_play_open_browser = 0
-" enable goimports
-let g:go_gpls_enabled = 1
-let g:go_fmt_command = "goimports"
-let g:go_imports_mode = "gopls"
-let g:go_imports_autosave = 1
-let g:go_def_mode='gopls'
-let g:go_info_mode='gopls'
-let g:go_def_mapping_enabled = 0
+"let g:vsnip_snippet_dir=
+let g:vsnip_snippet_dirs = ['~/.config/nvim/snippets']
 
-" enable additional highlighting
+let g:vsnip_filetypes = {}
+"let g:vsnip_filetypes.javascriptreact = ['javascript']
+"let g:vsnip_filetypes.typescriptreact = ['typescript']
 
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_types = 1
-let g:go_highlight_function_parameters = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_generate_tags = 1
-let g:go_highlight_format_strings = 1
-let g:go_highlight_variable_declarations = 1
-let g:go_auto_sameids = 1
-" Deugger
-"nnoremap <F5> :GoDebugStart<CR>
-"nnoremap <F8> :GoDebugContinue<CR>
-"nnoremap <F9> :GoDebugBreakpoint<CR>
-"nnoremap <F10> :GoDebugNext<CR>
+lua require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
 
 let g:vimspector_enable_mappings = 'HUMAN'
 
@@ -158,46 +210,10 @@ let g:bufferline_echo = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'dark'
 
-" tagbar
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds' : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-    \ ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-    \ },
-    \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-    \ },
-    \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent'
-\ }
-
-" Status line types/signatures.
-let g:go_auto_type_info = 1
 
 
 "lua require("lsp_config")
 "    root_dir = lspconfig.util.root_pattern('.git', '.mod');
-lua << EOF
-require'lspconfig'.gopls.setup{
-}
-EOF
-set completeopt=menuone,noinsert,noselect
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 command! Rename lua vim.lsp.buf.rename()
 let g:diagnostic_enable_virtual_text = 1
@@ -206,23 +222,17 @@ let g:diagnostic_auto_popup_while_jump = 1
 let g:diagnostic_insert_delay = 1
 
 
-"nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
-"nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
-nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
+nnoremap <leader>vdc :lua vim.lsp.buf.declaration()<CR>
 nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
+nnoremap <leader>vtd :lua vim.lsp.buf.type_definition()<CR>
 nnoremap <leader>vi :lua vim.lsp.buf.implementation()<CR>
 nnoremap <leader>vsh :lua vim.lsp.buf.signature_help()<CR>
 nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
 nnoremap <leader>vrn :lua vim.lsp.buf.rename()<CR>
 nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
+nnoremap <leader>vds :lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <leader>vws: lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <leader>vca :lua vim.lsp.buf.code_action()<CR>
 nnoremap <leader>vsd :lua vim.lsp.util.show_line_diagnostics(); vim.lsp.util.show_line_diagnostics()<CR>
 
@@ -232,7 +242,7 @@ fun! GotoWindow(id)
 endfun
 
 " Debugger remaps
-nnoremap <leader>m :MaximizerToggle!<CR>
+"nnoremap <leader>m :Maximizeruoggle!<CR>
 nnoremap <leader>dd :call vimspector#Launch()<CR>
 nnoremap <leader>dc :call GotoWindow(g:vimspector_session_windows.code)<CR>
 nnoremap <leader>dt :call GotoWindow(g:vimspector_session_windows.tagpage)<CR>
@@ -254,23 +264,9 @@ nmap <leader>drc <Plug>VimspectorRunToCursor
 nmap <leader>dbp <Plug>VimspectorToggleBreakpoint
 nmap <leader>dcbp <Plug>VimspectorToggleConditionalBreakpoint
 
-autocmd BufRead,BufNewFile *.flux set filetype=flux
-if executable('flux-lsp')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'flux lsp',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'flux-lsp']},
-        \ 'whitelist': ['flux'],
-        \ })
-endif
-autocmd FileType flux nmap gd <plug>(lsp-definition)
 
-
-autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 omnifunc=v:lua.vim.lsp.omnifunc
 " foldmethod=syntax
 autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=indent
-autocmd Filetype python setlocal foldmethod=indent
-"omnifunc=pythoncomplete#Complete
 let g:indentLine_char = '⦙'
 let g:indentLine_enabled = 0
 " :IndentLinesToggle
@@ -318,11 +314,11 @@ let g:airline_symbols.linenr = ''
 " Easy motion
 "
 " <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
+"map  <Leader>f <Plug>(easymotion-bd-f)
+"nmap <Leader>f <Plug>(easymotion-overwin-f)
 
 " s{char}{char} to move to {char}{char}
-nmap <Leader>s <Plug>(easymotion-overwin-f2)
+"nmap <Leader>s <Plug>(easymotion-overwin-f2)
 
 " Move to line
 map <Leader>l <Plug>(easymotion-bd-jk)
@@ -374,3 +370,6 @@ set termguicolors " this variable must be enabled for colors to be applied prope
 " a list of groups can be found at `:help lua_tree_highlight`
 "highlight LuaTreeFolderIcon guibg=blue
 
+" Minimap color
+hi MinimapCurrentLine ctermfg=Green guifg=#50FA7B guibg=#32302f
+let g:minimap_highlight = 'MinimapCurrentLine'
