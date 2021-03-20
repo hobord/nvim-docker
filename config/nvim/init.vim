@@ -59,16 +59,22 @@ map <C-PageUp> :bp<CR>
 map <C-PageDown> :bn<CR>
 map <C-S-PageUp> :BufferLineMovePrev<CR> 
 map <C-S-PageDown> :BufferLineMoveNext<CR>
-map <C-S-left> <C-w>h  
-map <C-S-down> <C-w><down>
-map <C-S-up> <C-w><up>
-map <C-S-right> <C-w>l
-map <C-t><up> :tabr<cr>
-map <C-t><down> :tabl<cr>
-map <C-t><left> :tabp<cr>
-map <C-t><right> :tabn<cr>
-map <C-t>n :tabnew<cr>
-map <leader>tc :tabclose<cr>
+
+"map <C-S-left> <C-w>h  
+"map <C-S-down> <C-w><down>
+"map <C-S-up> <C-w><up>
+"map <C-S-right> <C-w>l
+nnoremap <C-S-left> :vertical resize -5<cr>  
+nnoremap <C-S-down> :res -5<cr>
+nnoremap <C-S-up> :res +5<cr>
+nnoremap <C-S-right> :vertical resize +5<cr>
+
+nnoremap <C-t><up> :tabr<cr>
+nnoremap <C-t><down> :tabl<cr>
+nnoremap <C-t><left> :tabp<cr>
+nnoremap <C-t><right> :tabn<cr>
+nnoremap <C-t>n :tabnew<cr>
+nnoremap <leader>tc :tabclose<cr>
 map <C-s> <esc>:w<cr>
 inoremap <C-s> <esc>:w<cr>i
 inoremap II <Esc>I
@@ -197,30 +203,15 @@ lua require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
 
 let g:vimspector_enable_mappings = 'HUMAN'
 
-" Enable auto correct when buff enter.
-"augroup ILoveCorrections
-    "autocmd!
-    "autocmd BufEnter * EnableAutocorrect
-"augroup END
+command! JsonFormat :%!jq '.'
+command! JsonFormatToSingle :%!jq '-c' '.'
 
-" vim-airline
-set laststatus=2
-let g:bufferline_echo = 0
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'dark'
-
-
-
-"lua require("lsp_config")
-"    root_dir = lspconfig.util.root_pattern('.git', '.mod');
 nnoremap <silent> <F2> :lua vim.lsp.buf.rename()<CR>
 command! Rename lua vim.lsp.buf.rename()
 let g:diagnostic_enable_virtual_text = 1
 let g:diagnostic_enable_underline = 0
 let g:diagnostic_auto_popup_while_jump = 1
 let g:diagnostic_insert_delay = 1
-
-
 
 nnoremap <leader>vdc :lua vim.lsp.buf.declaration()<CR>
 nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
