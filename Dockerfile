@@ -8,6 +8,7 @@ RUN apt-get update \
     && apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
     && apt-get -y install --no-install-recommends \
         ca-certificates \
+        build-essential \
         git \
         lsb-release \
         curl \
