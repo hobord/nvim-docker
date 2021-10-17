@@ -1,5 +1,6 @@
 FROM ubuntu:focal
 ENV DEBIAN_FRONTEND=noninteractive
+ENV LIBSQLITE=/usr/lib/x86_64-linux-gnu/
 
 WORKDIR /tmp/
 
@@ -21,24 +22,26 @@ RUN apt-get update \
         make \
         python3-pip \
         zsh \
+        sqlite3 \
 		# Clean up
     && apt-get autoremove -y \
     && apt-get clean -y
 
 COPY config /root/.config
 
-RUN wget https://github.com/extrawurst/gitui/releases/download/v0.11.0/gitui-linux-musl.tar.gz \
-        && tar -xf gitui-linux-musl.tar.gz -C /usr/local/bin/ \
-        && wget https://github.com/wfxr/code-minimap/releases/download/v0.5.0/code-minimap-v0.5.0-x86_64-unknown-linux-musl.tar.gz \
-        && tar -xf code-minimap-v0.5.0-x86_64-unknown-linux-musl.tar.gz -C /usr/local/bin/ --strip-components=1 code-minimap-v0.5.0-x86_64-unknown-linux-musl/code-minimap \
-        && wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage \
-        && chmod +x ./nvim.appimage \
-        && ./nvim.appimage --appimage-extract \
-        && cp -a ./squashfs-root/* / \
-        && pip3 install neovim-remote \
-        && mkdir /workspace \
-        && rm -Rf /tmp/*
+RUN mkdir -p /root/.local/share/nvim/site/pack/packer/start/ \
+    && git clone https://github.com/wbthomason/packer.nvim /root/.local/share/nvim/site/pack/packer/start/packer.nvim \
+    #&& wget https://github.com/extrawurst/gitui/releases/download/v0.18.0/gitui-linux-musl.tar.gz \
+    #&& tar -xf gitui-linux-musl.tar.gz -C /usr/local/bin/ \
+    && wget https://github.com/neovim/neovim/releases/download/v0.5.1/nvim.appimage \
+    && chmod +x ./nvim.appimage \
+    && ./nvim.appimage --appimage-extract \
+    && cp -a ./squashfs-root/* / \
+    && pip3 install neovim-remote \
+    && ln -s /usr/lib/x86_64-linux-gnu/libsqlite3.so.0 /usr/lib/x86_64-linux-gnu/libsqlite3.so \
+    && mkdir /workspace \
+    && rm -Rf /tmp/*
 
-RUN nvim -u ~/.config/nvim/plugins.vim -es --headless +PlugInstall +qall  2> /dev/null 1>/dev/null; exit 0 
+RUN nvim --headless -c 'autocmd User PackerComplete quitall' 2> /dev/null 1>/dev/null; exit 0 
 
 WORKDIR /workspace

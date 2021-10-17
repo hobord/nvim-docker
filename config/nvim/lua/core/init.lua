@@ -1,0 +1,5 @@
+require('core.plugins')
+require('core.options')
+require('core.mapping')
+require('core.commands')
+require('core.auto')
